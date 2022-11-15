@@ -8,4 +8,6 @@ module main.rpggame {
 
     opens main.rpggame to javafx.fxml;
     exports main.rpggame;
+    exports main.rpggame.characters;
+    opens main.rpggame.characters to javafx.fxml;
 }

@@ -17,6 +17,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import main.rpggame.characters.Character;
 import main.rpggame.model2d.Character2D;
 
 import java.util.Objects;
@@ -91,6 +92,10 @@ public class RPGGame extends Application {
                 currentPlayer.setX(currentPlayer.getX()+10);
             }
 
+            if (e.getCode() == KeyCode.H) {
+                makeMove(Action.ABILITY);
+            }
+
             // make player attack
             if (fightScene.getCollider() != -1) {
                 if (e.getCode() == KeyCode.J) {
@@ -156,7 +161,20 @@ public class RPGGame extends Application {
         Character ai = fightScene.getSelectedMonster().getInfo();
 
         Action aiAction = makeAIMove();
-        ActionResult result = userAction.checkAgainst(aiAction);
+        ActionResult result = ActionResult.WIN;
+
+        if (aiAction == Action.ABILITY) {
+            String abilityString = ai.castAbility();
+            output.appendText(abilityString);
+        } else {
+            result = userAction.checkAgainst(aiAction);
+        }
+
+        if (userAction == Action.ABILITY) {
+            String abilityString = player.castAbility();
+            output.appendText(abilityString);
+            return;
+        }
 
         if (result == ActionResult.DRAW) {
             output.appendText("DRAW \n");
@@ -164,13 +182,13 @@ public class RPGGame extends Application {
         else if (result == ActionResult.WIN) {
             int dmg = player.calcDamage(userAction);
             ai.setHp(ai.getHp() - dmg);
-            output.appendText("Player deals " + dmg + " to " + fightScene.getSelectedMonster().getName() + "\n");
+            output.appendText("Player deals " + dmg + " to " + ai.getName() + "\n");
             updateInfo();
         }
         else {
             int dmg = ai.calcDamage(userAction);
             player.setHp(player.getHp() - dmg);
-            output.appendText(fightScene.getSelectedMonster().getName() + " deals " + dmg + " to player \n");
+            output.appendText(ai.getName()  + " deals " + dmg + " to player \n");
             updateInfo();
 
             // if player loses all hp
@@ -190,7 +208,7 @@ public class RPGGame extends Application {
 
     private void updateInfo() {
         output.appendText("Player " + fightScene.getPlayer().getInfo() + ", "
-                + fightScene.getSelectedMonster().getName() + " "
+                + fightScene.getSelectedMonster().getInfo().getName() + " "
                 + fightScene.getSelectedMonster().getInfo() + "\n");
     }
 

@@ -1,10 +1,39 @@
-package main.rpggame;
+package main.rpggame.characters;
 
-public class Character {
+import main.rpggame.Action;
+
+public abstract class Character {
     private int hp;
     private int attackPower;
     private int chargePower;
     private int blockPower;
+
+    private String name;
+    private double velocity;
+
+
+    public Character(int hp, int attackPower, int chargePower, int blockPower,  String name) {
+        this.hp = hp;
+        this.attackPower = attackPower;
+        this.chargePower = chargePower;
+        this.blockPower = blockPower;
+        this.name = name;
+        this.velocity = 1.0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
+    }
+
+
 
     public int getHp() {
         return hp;
@@ -38,13 +67,6 @@ public class Character {
         this.blockPower = blockPower;
     }
 
-    public Character(int hp, int attackPower, int chargePower, int blockPower) {
-        this.hp = hp;
-        this.attackPower = attackPower;
-        this.chargePower = chargePower;
-        this.blockPower = blockPower;
-    }
-
     public int calcDamage(Action action) {
         switch(action) {
             case ATTACK:
@@ -61,6 +83,9 @@ public class Character {
     private boolean crit(int chance) {
         return chance > ((int) (Math.random() * 100));
     }
+
+    public abstract String castAbility();
+
     public String toString() {
         return "HP: " + hp;
     }

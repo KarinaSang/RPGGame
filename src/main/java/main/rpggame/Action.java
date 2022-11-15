@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Action {
-    ATTACK, CHARGE, BLOCK;
+    ATTACK, CHARGE, BLOCK, ABILITY;
 
     private static final Map<Action, Action> winMap = new HashMap<>();
 
