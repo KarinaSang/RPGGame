@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import main.rpggame.characters.Character;
+import main.rpggame.characters.Player;
 import main.rpggame.model2d.Character2D;
 
 import java.util.Objects;
@@ -92,12 +93,13 @@ public class RPGGame extends Application {
                 currentPlayer.setX(currentPlayer.getX()+10);
             }
 
-            if (e.getCode() == KeyCode.H) {
+            if (e.getCode() == KeyCode.ENTER
+                && !((Player)(currentPlayer.getInfo())).getArrowOn()) {
                 makeMove(Action.ABILITY);
             }
 
             // make player attack
-            if (fightScene.getCollider() != -1) {
+            if (fightScene.getCollider(currentPlayer.getX(), currentPlayer.getY()) != -1) {
                 if (e.getCode() == KeyCode.J) {
                     makeMove(Action.ATTACK);
                 }
@@ -157,24 +159,22 @@ public class RPGGame extends Application {
     }
 
     private void makeMove(Action userAction) {
-        Character player = fightScene.getPlayer().getInfo();
-        Character ai = fightScene.getSelectedMonster().getInfo();
-
         Action aiAction = makeAIMove();
-        ActionResult result = ActionResult.WIN;
-
-        if (aiAction == Action.ABILITY) {
-            String abilityString = ai.castAbility();
-            output.appendText(abilityString);
-        } else {
-            result = userAction.checkAgainst(aiAction);
-        }
+        Character player = fightScene.getPlayer().getInfo();
 
         if (userAction == Action.ABILITY) {
             String abilityString = player.castAbility();
             output.appendText(abilityString);
-            return;
+
+            if (fightScene.getSelectedMonster() == null) {
+                return;
+            }
         }
+
+        Character ai = fightScene.getSelectedMonster().getInfo();
+
+        ActionResult result = userAction.checkAgainst(aiAction);
+
 
         if (result == ActionResult.DRAW) {
             output.appendText("DRAW \n");

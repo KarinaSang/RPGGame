@@ -75,6 +75,8 @@ public abstract class Character {
                 return chargePower;
             case BLOCK:
                 return blockPower;
+            case ABILITY:
+                return attackPower/2;
             default:
                 return -1;
         }

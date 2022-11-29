@@ -18,6 +18,12 @@ public enum Action {
         if (this == other)
             return ActionResult.DRAW;
 
+        if (this == ABILITY)
+            return ActionResult.LOSE;
+        else if (other == ABILITY)
+            return ActionResult.WIN;
+
+
         return winMap.get(this) == other ? ActionResult.WIN : ActionResult.LOSE;
     }
 
